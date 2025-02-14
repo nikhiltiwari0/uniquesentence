@@ -22,4 +22,3 @@ else:
 with open(FILENAME, "w") as f:
     json.dump(sentences, f)
 
-print(sentences)
