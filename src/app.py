@@ -38,4 +38,5 @@ def add_sentence():
     return jsonify({"message": message, "sentences": sentences})
 
 if __name__ == "__main__":
+    from waitress import serve
     app.run(debug=True)

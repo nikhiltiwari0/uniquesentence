@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./App.css"
 import axios from "axios";
 
 function App() {
@@ -25,19 +26,24 @@ function App() {
     setMessage(error.response?.data?.message || "An error occurred");
   }
 };
+
+
+  
   return (
-    <div>
+    <div className="container">
       <h1>Unique Sentence Checker</h1>
       <input
         type="text"
+        className="input-box"
         value={sentence}
         onChange={(e) => setSentence(e.target.value)}
         placeholder="Enter a sentence"
       />
-      <button onClick={handleSubmit}>Submit</button>
+      <button 
+        className="submit-button"
+        onClick={handleSubmit}>Submit
+      </button>
       <p>{message}</p>
-      <h2>Stored Sentences</h2>
-      <pre>{JSON.stringify(sentences, null, 2)}</pre>
     </div>
   );
 }
