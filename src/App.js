@@ -1,11 +1,14 @@
-import React, { useState } from "react";
 import "./App.css"
+
+import React, { useEffect, useState } from "react";
+
 import axios from "axios";
 
 function App() {
   const [sentence, setSentence] = useState("");
   const [message, setMessage] = useState("");
   const [sentences, setSentences] = useState({});
+  const [leaderboard, setLeaderboard] = useState([]);
 
   const handleSubmit = async () => {
   try {
@@ -26,8 +29,21 @@ function App() {
     setMessage(error.response?.data?.message || "An error occurred");
   }
 };
+  const fetchLeaderboard = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/leaderboard", {
+        params: { limit: 5 }, // Get top 5
+      });
 
+      setLeaderboard(response.data.leaderboard);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchLeaderboard(); // Fetch leaderboard when component mounts
+  }, []);
   
   return (
     <div className="container">
@@ -39,11 +55,21 @@ function App() {
         onChange={(e) => setSentence(e.target.value)}
         placeholder="Enter a sentence"
       />
-      <button 
-        className="submit-button"
-        onClick={handleSubmit}>Submit
+      <button
+        onClick={async () => {
+          await handleSubmit(); 
+          fetchLeaderboard();
+        }}
+      >
+        Submit
       </button>
       <p>{message}</p>
+      <h2>Top Sentences</h2>
+      {leaderboard.map(([sentence, count], index) => (
+        <li key={index}>
+          "{sentence}" - {count} times
+        </li>
+      ))}
     </div>
   );
 }
